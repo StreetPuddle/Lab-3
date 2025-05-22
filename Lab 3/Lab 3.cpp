@@ -23,7 +23,10 @@ int main(void) {
 
 	ALLEGRO_DISPLAY* Screen = NULL;
 	ALLEGRO_EVENT_QUEUE* event_queue = NULL;
-	ALLEGRO_FONT* font24 = al_load_font("AppleGaramond.ttf", 24, 0);
+	ALLEGRO_FONT* font1 = al_load_font("AppleGaramond.ttf", 24, 0);
+	ALLEGRO_FONT* font2 = al_load_font("Bombing.ttf", 24, 0);
+	ALLEGRO_FONT* font3 = al_load_font("yardsale.ttf", 24, 0);
+	ALLEGRO_FONT* font4 = al_load_font("CHICKEN Pie.ttf", 24, 0);
 
 	if (!al_init()) {
 		al_show_native_message_box(NULL, "Error!", "Allegro has failed to initialize.", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
@@ -75,25 +78,25 @@ int main(void) {
 			if (pos_x <= 400 && pos_y <= 300) {
 				al_clear_to_color(al_map_rgb(255, 255, 255));
 				draw_filled_triforce(pos_x, pos_y);
-				al_draw_textf(font24, al_map_rgb(0, 0, 0), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
+				al_draw_textf(font1, al_map_rgb(0, 0, 0), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
 			}
 			else if (pos_x >= 400 && pos_y <= 300) {
 				al_clear_to_color(al_map_rgb(0, 0, 0));
 				draw_filled_triforce(pos_x, pos_y);
-				al_draw_textf(font24, al_map_rgb(255, 255, 255), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
+				al_draw_textf(font2, al_map_rgb(255, 255, 255), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
 			}
 			else if (pos_x <= 400 && pos_y >= 300) {
 				al_clear_to_color(al_map_rgb(0, 120, 180));
 				draw_filled_triforce(pos_x, pos_y);
-				al_draw_textf(font24, al_map_rgb(255, 220, 0), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
+				al_draw_textf(font3, al_map_rgb(255, 220, 0), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
 			}
 			else {
 				al_clear_to_color(al_map_rgb(255, 220, 100));
 				draw_triforce(pos_x, pos_y);
-				al_draw_textf(font24, al_map_rgb(0, 120, 180), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
+				al_draw_textf(font4, al_map_rgb(0, 120, 180), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
 			}
 		}
@@ -101,7 +104,10 @@ int main(void) {
 
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(Screen);
-	al_destroy_font(font24);
+	al_destroy_font(font1);
+	al_destroy_font(font2);
+	al_destroy_font(font3);
+	al_destroy_font(font4);
 	return 0;
 }
 
