@@ -9,38 +9,34 @@
 //@param pos_y y cordinate
 void draw_filled_triforce(int pos_x, int pos_y);
 
+//draws a hollow triforce in black, aka three triangles in a formation
+//@param pos_x x cordinate
+//@param pos_y y cordinate
+void draw_triforce(int pos_x, int pos_y);
+
 int main(void) {
 
+	al_init();
 	al_init_primitives_addon();
-	al_init_font_addon;
-	al_init_ttf_addon;
+	al_init_font_addon();
+	al_init_ttf_addon();
 
-	int width = 800, height = 600;
-	int pos_x = width / 2;
-	int pos_y = height / 2;
-	bool done = false, draw = false;
-
-	ALLEGRO_DISPLAY *Screen = NULL;
-	Screen = al_create_display(width, height);
-
+	ALLEGRO_DISPLAY* Screen = NULL;
 	ALLEGRO_EVENT_QUEUE* event_queue = NULL;
-	event_queue = al_create_event_queue();
-
-	ALLEGRO_FONT *font24 = al_load_font("AppleGaramond.ttf", 24, 0);
-
-	al_register_event_source(event_queue, al_get_display_event_source(Screen));
-	al_clear_to_color;
-
-	if (!al_install_mouse()) {
-		al_show_native_message_box(Screen, "Error!", "Failed to initialize the mouse\n", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
-		return -1;
-	}
+	ALLEGRO_FONT* font24 = al_load_font("AppleGaramond.ttf", 24, 0);
 
 	if (!al_init()) {
 		al_show_native_message_box(NULL, "Error!", "Allegro has failed to initialize.", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
 		return -1;
 	}
 
+	if (!al_install_mouse()) {
+		al_show_native_message_box(Screen, "Error!", "Failed to initialize the mouse\n", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
+		return -1;
+	}
+
+	int width = 800, height = 600;
+	Screen = al_create_display(width, height);
 	if (Screen == NULL) {
 		al_show_native_message_box(Screen, "Error!", "Failed to create the display.", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
 		return -1;
@@ -52,7 +48,13 @@ int main(void) {
 		return -1;
 	}
 
+	int pos_x = width / 2, pos_y = height / 2;
+	bool done = false, draw = false;
+	al_register_event_source(event_queue, al_get_display_event_source(Screen));
 	al_register_event_source(event_queue, al_get_mouse_event_source());
+	al_clear_to_color(al_map_rgb(0, 0, 0));
+	draw_filled_triforce(width / 2, height / 2);
+	al_flip_display();
 
 	while (!done) {
 
@@ -65,40 +67,52 @@ int main(void) {
 				draw = true;
 				pos_x = ev.mouse.x;
 				pos_y = ev.mouse.y;
+				al_clear_to_color(al_map_rgb(0, 0, 0));
 			}
 		}
 
 		if (draw) {
-			if (pos_x <= 200 && pos_x >= 0 && pos_y >= 0 && pos_y <= 200) {
-				draw_filled_triforce(0, 0, al_map_rgb(150, 150, 150));
-				draw_filled_triforce(400, 400, al_map_rgb(0, 0, 0));
-				al_draw_textf(font24, al_map_rgb(255, 255, 255), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
+			if (pos_x <= 400 && pos_y <= 300) {
+				al_clear_to_color(al_map_rgb(255, 255, 255));
+				draw_filled_triforce(pos_x, pos_y);
+				al_draw_textf(font24, al_map_rgb(0, 0, 0), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
-			} else if (pos_x >= 400 && pos_x <= 640 && pos_y >= 400 && pos_y <= 480) {
-				draw_filled_triforce(400, 400, al_map_rgb(150, 0, 150));
-				draw_filled_triforce(0, 0, al_map_rgb(0, 0, 0));
-				al_draw_textf(font24, al_map_rgb(255, 255, 255), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
-				al_flip_display();
-			} else {
-				draw_filled_triforce(0, 0, al_map_rgb(0, 0, 0));
-				draw_filled_triforce(400, 400, al_map_rgb(0, 0, 0));
+			}
+			else if (pos_x >= 400 && pos_y <= 300) {
+				al_clear_to_color(al_map_rgb(0, 0, 0));
+				draw_filled_triforce(pos_x, pos_y);
 				al_draw_textf(font24, al_map_rgb(255, 255, 255), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
 			}
+			else if (pos_x <= 400 && pos_y >= 300) {
+				al_clear_to_color(al_map_rgb(0, 120, 180));
+				draw_filled_triforce(pos_x, pos_y);
+				al_draw_textf(font24, al_map_rgb(255, 220, 0), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
+				al_flip_display();
+			}
+			else {
+				al_clear_to_color(al_map_rgb(255, 220, 100));
+				draw_triforce(pos_x, pos_y);
+				al_draw_textf(font24, al_map_rgb(0, 120, 180), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
+				al_flip_display();
+			}
 		}
-
-		al_clear_to_color(al_map_rgb(0, 0, 0));
 	}
 
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(Screen);
 	al_destroy_font(font24);
-	system("pause");
 	return 0;
 }
 
-void draw_filled_triforce(int pos_x, int pos_y, ALLEGRO_COLOR color) {
-	al_draw_filled_triangle(pos_x, pos_y, pos_x + 30, pos_y - 30, pos_x + 60, pos_y, color);
-	al_draw_filled_triangle(pos_x - 30, pos_y + 30, pos_x, pos_y, pos_x + 30, pos_y + 30, color);
-	al_draw_filled_triangle(pos_x + 29, pos_y + 30, pos_x + 90, pos_y + 30, pos_x + 60, pos_y, color);
+void draw_filled_triforce(int pos_x, int pos_y) {
+	al_draw_filled_triangle(pos_x, pos_y, pos_x + 30, pos_y - 30, pos_x + 60, pos_y, al_map_rgb(255, 220, 0));
+	al_draw_filled_triangle(pos_x + 60, pos_y - 60, pos_x + 30, pos_y - 30, pos_x + 90, pos_y - 30, al_map_rgb(255, 220, 0));
+	al_draw_filled_triangle(pos_x + 90, pos_y - 30, pos_x + 120, pos_y, pos_x + 60, pos_y, al_map_rgb(255, 220, 0));
+}
+
+void draw_triforce(int pos_x, int pos_y) {
+	al_draw_triangle(pos_x, pos_y, pos_x + 30, pos_y - 30, pos_x + 60, pos_y, al_map_rgb(0, 0, 0), 2.5);
+	al_draw_triangle(pos_x + 60, pos_y - 60, pos_x + 30, pos_y - 30, pos_x + 90, pos_y - 30, al_map_rgb(0, 0, 0), 2.5);
+	al_draw_triangle(pos_x + 90, pos_y - 30, pos_x + 120, pos_y, pos_x + 60, pos_y, al_map_rgb(0, 0, 0), 2.5);
 }
