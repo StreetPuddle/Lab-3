@@ -1,5 +1,5 @@
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>//Our primitive header file
+#include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_native_dialog.h> 
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
@@ -23,6 +23,8 @@ int main(void) {
 
 	ALLEGRO_DISPLAY* Screen = NULL;
 	ALLEGRO_EVENT_QUEUE* event_queue = NULL;
+
+	//loading fonts
 	ALLEGRO_FONT* font1 = al_load_font("AppleGaramond.ttf", 24, 0);
 	ALLEGRO_FONT* font2 = al_load_font("Bombing.ttf", 24, 0);
 	ALLEGRO_FONT* font3 = al_load_font("yardsale.ttf", 24, 0);
@@ -33,6 +35,8 @@ int main(void) {
 		return -1;
 	}
 
+
+	//where the mouse is initialized
 	if (!al_install_mouse()) {
 		al_show_native_message_box(Screen, "Error!", "Failed to initialize the mouse\n", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
 		return -1;
@@ -53,6 +57,8 @@ int main(void) {
 
 	int pos_x = width / 2, pos_y = height / 2;
 	bool done = false, draw = false;
+
+	//registering the screen and mouse sources to listen for events 
 	al_register_event_source(event_queue, al_get_display_event_source(Screen));
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 	al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -61,12 +67,13 @@ int main(void) {
 
 	while (!done) {
 
-		ALLEGRO_EVENT ev;
+		ALLEGRO_EVENT ev;//variable that contains an event passed from the queue
 		al_wait_for_event(event_queue, &ev);
+
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 			done = true;
-		} else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-			if (ev.mouse.button & 1) {
+		} else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {//check if event is a mouse click
+			if (ev.mouse.button & 1) {//check if the event is a left click
 				draw = true;
 				pos_x = ev.mouse.x;
 				pos_y = ev.mouse.y;
@@ -75,26 +82,23 @@ int main(void) {
 		}
 
 		if (draw) {
-			if (pos_x <= 400 && pos_y <= 300) {
+			if (pos_x <= 400 && pos_y <= 300) {//upper left quadrant
 				al_clear_to_color(al_map_rgb(255, 255, 255));
 				draw_filled_triforce(pos_x, pos_y);
 				al_draw_textf(font1, al_map_rgb(0, 0, 0), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
-			}
-			else if (pos_x >= 400 && pos_y <= 300) {
+			} else if (pos_x >= 400 && pos_y <= 300) {//upper right quadrant
 				al_clear_to_color(al_map_rgb(0, 0, 0));
 				draw_filled_triforce(pos_x, pos_y);
 				al_draw_textf(font2, al_map_rgb(255, 255, 255), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
-			}
-			else if (pos_x <= 400 && pos_y >= 300) {
+			} else if (pos_x <= 400 && pos_y >= 300) {//lower left quadrant
 				al_clear_to_color(al_map_rgb(0, 120, 180));
 				draw_filled_triforce(pos_x, pos_y);
 				al_draw_textf(font3, al_map_rgb(255, 220, 0), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
-			}
-			else {
-				al_clear_to_color(al_map_rgb(255, 220, 100));
+			} else {
+				al_clear_to_color(al_map_rgb(255, 220, 100));//lower right quadrant
 				draw_triforce(pos_x, pos_y);
 				al_draw_textf(font4, al_map_rgb(0, 120, 180), pos_x, pos_y, ALLEGRO_ALIGN_LEFT, "The mouse is located at = %i / %i", pos_x, pos_y);
 				al_flip_display();
